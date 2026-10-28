@@ -1,0 +1,36 @@
+# Render Blueprint - Dashboard -> New -> Blueprint -> pick this repository.
+# FREE plan: works, but Render's free instances have no persistent disk,
+# so registered users/donors/requests are LOST on every restart, redeploy
+# or spin-down (after 15 min without visitors). Fine for a demo / viva.
+# For real use choose a paid instance and un-comment the "disk" block.
+services:
+  - type: web
+    name: lifedrop
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm ci --omit=dev
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: APP_URL            # set to your public URL, e.g. https://lifedrop.onrender.com
+        sync: false
+      - key: ADMIN_EMAIL        # first admin account (created at start-up if missing)
+        sync: false
+      - key: ADMIN_PASSWORD     # min 10 characters, letters + numbers
+        sync: false
+      - key: EMAIL_LINK_SECRET
+        generateValue: true
+      - key: ADMIN_KEY
+        generateValue: true
+    # Paid instance only - keeps data across restarts:
+    # disk:
+    #   name: lifedrop-data
+    #   mountPath: /var/data
+    #   sizeGB: 1
+    # and add:  - key: DATA_DIR
+    #             value: /var/data

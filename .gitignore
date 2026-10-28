@@ -1,0 +1,16 @@
+node_modules/
+backend/.env
+backend/data/users.json
+backend/data/sessions.json
+backend/data/email-log.json
+backend/data/.link-secret
+backend/data/outbox/
+backend/data/donors.json
+backend/data/requests.json
+backend/data/camps.json
+backend/data/admins.json
+backend/data/admin-sessions.json
+backend/data/admin-audit.json
+backend/data/matches.json
+backend/data/donations.json
+backend/data/feedback.json
