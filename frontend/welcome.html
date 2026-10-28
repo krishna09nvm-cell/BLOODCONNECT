@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome | Blood Donation and Blood Camp Tracker</title>
+    <meta name="description" content="Find Blood. Donate Blood. Save Lives. Log in or create an account.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-no-account-link>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <nav class="container nav-inner">
+            <a href="welcome.html" class="logo"><span class="logo-drop"><span>+</span></span>Life<b>Drop</b></a>
+            <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="statistics.html">Dashboard</a></li>
+                <li><a href="camps.html">Find Camps</a></li>
+                <li><a href="camps.html?view=banks">Blood Banks</a></li>
+                <li id="navLogin"><a href="login.html">Login</a></li>
+                <li id="navSignup"><a href="signup.html" class="nav-emergency">Create Account</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <!-- ================= WELCOME ================= -->
+    <section class="welcome-hero" data-floaters="8">
+        <div class="container welcome-grid">
+            <div class="welcome-text">
+                <span class="eyebrow">Welcome</span>
+                <h1>Blood Donation and <span>Blood Camp Tracker</span></h1>
+                <p class="tagline">Find Blood. Donate Blood. Save Lives.</p>
+                <p>Find blood donation camps and blood banks near your PIN code, register as a donor,
+                   or organise a camp. Create a free account to get a dashboard made for you.</p>
+
+                <!-- Logged out -->
+                <div class="welcome-actions" id="guestActions">
+                    <a href="login.html" class="btn btn-primary" data-mascot-point="Welcome back! 😊">Login</a>
+                    <a href="signup.html" class="btn btn-outline" data-mascot-point="Join us, be a hero!" data-mascot-cheer="Yay! Welcome aboard 👍">Create Account</a>
+                </div>
+                <!-- Logged in (shown by the script below) -->
+                <div class="welcome-actions" id="userActions" hidden>
+                    <a href="dashboard.html" class="btn btn-primary" id="dashLink">Go to my dashboard</a>
+                    <button type="button" class="btn btn-outline" id="welcomeLogout">Logout</button>
+                </div>
+                <a href="index.html" class="guest-link">Continue without an account →</a>
+            </div>
+
+            <!-- Dr. Asha, the animated doctor (js/mascot.js). Click her to chat with the AI Assistant. -->
+            <div class="welcome-art has-doctor">
+                <div data-doctor></div>
+                <div class="welcome-badge one" aria-hidden="true"><span class="pill pill-red">O−</span><div>Camps near you<small>Search by PIN code</small></div></div>
+                <div class="welcome-badge two" aria-hidden="true">🩸<div>Donate at a camp<small>Dates, times, directions</small></div></div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= THREE ROLES ================= -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <span class="eyebrow">One account, three dashboards</span>
+                <h2>Choose how you want to help</h2>
+                <p>Pick your role when you create your account. Your dashboard shows the tools you need.</p>
+            </div>
+            <div class="role-grid">
+                <div class="role-card">
+                    <div class="role-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5C9 7.5 5.5 10.8 5.5 15a6.5 6.5 0 0 0 13 0c0-4.2-3.5-7.5-6.5-12.5z" fill="currentColor"/></svg></div>
+                    <h3>Blood Donor</h3>
+                    <ul><li>See donation camps near you on a map</li><li>Search camps by PIN code or place</li><li>Camp dates, addresses and contacts</li><li>Keep your profile up to date</li></ul>
+                </div>
+                <div class="role-card">
+                    <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></div>
+                    <h3>Blood Finder</h3>
+                    <ul><li>Find camps, blood banks and hospitals</li><li>Search by city, locality or PIN code</li><li>Official blood bank details</li><li>Directions in one tap</li></ul>
+                </div>
+                <div class="role-card">
+                    <div class="role-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20 12 5l9 15z"/><path d="M12 20v-6l-3 6M12 14l3 6"/><path d="M2 20h20"/></svg></div>
+                    <h3>Camp Organizer</h3>
+                    <ul><li>Add blood donation camps</li><li>Pin the venue on the map</li><li>Edit or delete your camps</li><li>Camps go live after verification</li></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="welcome.html" class="logo"><span class="logo-drop"><span>+</span></span> Life<b>Drop</b></a>
+                    <p>Blood Donation and Blood Camp Tracker. A BCA college project connecting donors, camps and people in need.</p>
+                </div>
+                <div>
+                    <h4>Quick links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="camps.html">Find Camps</a></li>
+                        <li><a href="statistics.html">Dashboard</a></li>
+                        <li><a href="find-donor.html">Find Donor</a></li>
+                        <li><a href="terms.html">Terms &amp; Privacy</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Emergency</h4>
+                    <ul><li>Ambulance: 108</li><li>National Emergency: 112</li><li><a href="emergency.html">Post a blood request →</a></li></ul>
+                </div>
+            </div>
+            <div class="footer-bottom">© 2026 LifeDrop · Made with ❤ for a college project</div>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
+    <script src="js/decor.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/mascot.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        // Already logged in? Offer the dashboard instead of Login / Create Account
+        currentUser().then(user => {
+            if (!user) return;
+            document.getElementById("guestActions").hidden = true;
+            document.getElementById("userActions").hidden = false;
+            document.getElementById("dashLink").textContent = `Go to my dashboard (${user.roleName})`;
+            document.getElementById("navLogin").innerHTML = '<a href="dashboard.html">My Dashboard</a>';
+            document.getElementById("navSignup").innerHTML = '<a href="#" class="nav-emergency" id="navLogout">Logout</a>';
+            document.getElementById("navLogout").addEventListener("click", e => { e.preventDefault(); logout(); });
+        });
+        document.getElementById("welcomeLogout").addEventListener("click", logout);
+    </script>
+</body>
+</html>

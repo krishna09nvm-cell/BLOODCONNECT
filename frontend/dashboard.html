@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Dashboard | Blood Donation and Blood Camp Tracker</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-no-account-link>
+
+    <!-- ================= NAVBAR (logged in) ================= -->
+    <header class="navbar">
+        <nav class="container nav-inner">
+            <a href="welcome.html" class="logo"><span class="logo-drop"><span>+</span></span>Life<b>Drop</b></a>
+            <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="statistics.html">Dashboard</a></li>
+                <li><a href="camps.html">Find Camps</a></li>
+                <li><a href="camps.html?view=banks">Blood Banks</a></li>
+                <li><a href="#profile" data-tab-link="profile">Profile</a></li>
+                <li><a href="#" class="nav-emergency" id="navLogout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Shown until we know who is logged in -->
+    <div class="loading-screen" id="dashLoading">Loading your dashboard…</div>
+
+    <main id="dashApp" hidden>
+        <!-- ================= HEADER ================= -->
+        <section class="dash-header" data-floaters="6">
+            <div class="container dash-header-inner">
+                <div>
+                    <span class="role-badge" id="roleBadge"></span>
+                    <h1 id="dashWelcome">Welcome</h1>
+                    <p id="dashIntro"></p>
+                </div>
+                <button type="button" class="btn btn-white" id="headerLogout">Logout</button>
+            </div>
+        </section>
+
+        <div class="container dash-body">
+            <div class="dash-tabs" role="tablist" id="dashTabs"></div>
+
+            <!-- ================= DONOR / FINDER: FIND CAMPS ================= -->
+            <section id="tab-find" class="dash-tab" role="tabpanel" hidden>
+                <div class="panel">
+                    <h2 class="panel-title" id="findTitle">Blood donation camps near you</h2>
+                    <form class="dash-search" id="findForm" autocomplete="off">
+                        <div class="form-group">
+                            <label for="findQuery" id="findLabel">PIN code, city or locality</label>
+                            <input type="search" id="findQuery" placeholder="e.g. 575001, Mangaluru or Manipal">
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="findBtn">Search</button>
+                        <button type="button" class="btn btn-outline" id="findGps">📍 Use my location</button>
+                    </form>
+                    <div class="dash-filters">
+                        <label class="check-row" for="fUpcoming"><input type="checkbox" id="fUpcoming" checked> Upcoming camps</label>
+                        <label class="check-row" for="fOngoing"><input type="checkbox" id="fOngoing" checked> Ongoing camps</label>
+                        <span class="finder-only" hidden><label class="check-row" for="fBanks"><input type="checkbox" id="fBanks" checked> Blood banks</label></span>
+                        <span class="finder-only" hidden><label class="check-row" for="fHospitals"><input type="checkbox" id="fHospitals" checked> Hospitals</label></span>
+                        <label for="fDistance" class="check-row">Within
+                            <select id="fDistance" style="padding:6px 10px;border-radius:10px;border:1.5px solid var(--line);font:inherit;">
+                                <option value="10">10 km</option>
+                                <option value="25" selected>25 km</option>
+                                <option value="50">50 km</option>
+                                <option value="100">100 km</option>
+                                <option value="any">any distance</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="location-status" id="findStatus">Search your PIN code, city or locality, or use your location.</div>
+                </div>
+
+                <div class="dash-results">
+                    <div>
+                        <div class="results-head"><h2 id="findResultsTitle">Results</h2><span class="pill pill-red" id="findCount">0</span></div>
+                        <div class="dash-list" id="findList"><div class="empty-state">Loading…</div></div>
+                        <p class="hint" style="margin-top:10px;">Camps are listed only after verification. Sample camps are labelled. Blood banks and hospitals: official National Health Portal directory; blood stock is not shown, so call before going.
+                           <a href="camps.html" class="text-link-red">Open the full camp tracker →</a></p>
+                    </div>
+                    <div>
+                        <div class="dash-map" id="findMap"></div>
+                        <div class="map-legend">
+                            <span><i class="legend-dot" style="background:var(--blue)"></i> You</span>
+                            <span><i class="legend-dot" style="background:var(--green)"></i> Ongoing camp</span>
+                            <span><i class="legend-dot" style="background:var(--red)"></i> Upcoming camp</span>
+                            <span class="finder-only" hidden><i class="legend-dot legend-bank-sq"></i> Blood bank</span>
+                            <span class="finder-only" hidden><i class="legend-dot legend-hosp-sq"></i> Hospital</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= ORGANIZER: MY CAMPS ================= -->
+            <section id="tab-camps" class="dash-tab" role="tabpanel" hidden>
+                <div class="dash-stats">
+                    <div class="dash-stat"><b id="statTotal">0</b><span>My camps</span></div>
+                    <div class="dash-stat"><b id="statPending">0</b><span>Pending verification</span></div>
+                    <div class="dash-stat"><b id="statApproved">0</b><span>Approved and public</span></div>
+                </div>
+                <div class="panel">
+                    <div class="results-head">
+                        <h2 class="panel-title" style="margin:0;">My blood donation camps</h2>
+                        <button type="button" class="btn btn-primary btn-sm" id="addCampBtn">＋ Add a new camp</button>
+                    </div>
+                    <p class="hint">New and edited camps stay <b>pending verification</b> until an administrator approves them. Only approved camps appear on the public map.</p>
+                    <div class="admin-list" id="orgList"><div class="empty-state">Loading…</div></div>
+                </div>
+            </section>
+
+            <section id="tab-campform" class="dash-tab" role="tabpanel" hidden>
+                <div class="panel">
+                    <h2 class="panel-title" id="ofTitle">Add a blood donation camp</h2>
+                    <div class="form-alert" id="ofAlert" role="alert" hidden></div>
+                    <form id="orgForm" class="auth-form" novalidate>
+                        <div class="form-grid">
+                            <div class="form-group full"><label for="ofName">Camp name <span class="req">*</span></label><input type="text" id="ofName" maxlength="120" placeholder="e.g. Voluntary Blood Donation Camp"></div>
+                            <div class="form-group"><label for="ofOrganiser">Organiser / hospital name <span class="req">*</span></label><input type="text" id="ofOrganiser" maxlength="120"></div>
+                            <div class="form-group"><label for="ofOrganiserType">Organiser type <span class="req">*</span></label>
+                                <select id="ofOrganiserType"><option value="">Select</option><option>Hospital</option><option>Blood bank</option><option>NGO</option><option>College / School</option><option>Company</option><option>Organisation</option></select></div>
+                            <div class="form-group full"><label for="ofVenue">Venue address <span class="req">*</span></label><input type="text" id="ofVenue" maxlength="200" placeholder="Building, street, area"></div>
+                            <div class="form-group"><label for="ofState">State / Union Territory <span class="req">*</span></label><select id="ofState"></select></div>
+                            <div class="form-group"><label for="ofCity">City <span class="req">*</span></label>
+                                <input type="search" id="ofCitySearch" class="city-search" placeholder="Type to search city" autocomplete="off" aria-label="Search city"><select id="ofCity"></select></div>
+                            <div class="form-group"><label for="ofPincode">PIN code <span class="req">*</span></label><input type="text" id="ofPincode" inputmode="numeric" maxlength="6" placeholder="575001"></div>
+                            <div class="form-group"><label for="ofDate">Date <span class="req">*</span></label><input type="date" id="ofDate"></div>
+                            <div class="form-group"><label for="ofStart">Start time <span class="req">*</span></label><input type="time" id="ofStart"></div>
+                            <div class="form-group"><label for="ofEnd">End time <span class="req">*</span></label><input type="time" id="ofEnd"></div>
+                            <div class="form-group"><label for="ofContactName">Contact person <span class="req">*</span></label><input type="text" id="ofContactName" maxlength="80"></div>
+                            <div class="form-group"><label for="ofPhone">Contact phone</label><input type="tel" id="ofPhone" inputmode="numeric" maxlength="10" placeholder="10 digits"></div>
+                            <div class="form-group"><label for="ofEmail">Contact email</label><input type="email" id="ofEmail" placeholder="camp@example.com"></div>
+                            <div class="form-group"><label for="ofLink">Registration link (optional)</label><input type="url" id="ofLink" placeholder="https://"></div>
+                            <div class="form-group full">
+                                <span class="label">Camp location on the map <span class="req">*</span></span>
+                                <p class="hint" style="margin-bottom:8px;">Click <b>Find on map</b> or click the map at the venue. You can drag the pin to the exact spot.</p>
+                                <div class="mini-map" id="ofMap"></div>
+                                <div class="inline-row" style="margin-top:10px;align-items:center;">
+                                    <button type="button" class="btn btn-light btn-sm" id="ofFindBtn">🔎 Find on map</button>
+                                    <input type="text" id="ofLat" placeholder="Latitude" style="width:130px;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;" aria-label="Latitude">
+                                    <input type="text" id="ofLng" placeholder="Longitude" style="width:130px;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;" aria-label="Longitude">
+                                </div>
+                                <p class="hint" id="ofMapHint"></p>
+                            </div>
+                        </div>
+                        <label class="terms-row" for="ofAuthorised"><input type="checkbox" id="ofAuthorised"> <span>I am authorised to publish this camp and the details are correct. <span class="req">*</span></span></label>
+                        <div class="inline-row">
+                            <button type="submit" class="btn btn-primary" id="ofSubmit">Save camp</button>
+                            <button type="button" class="btn btn-light" id="ofCancel">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- ================= PROFILE (all roles) ================= -->
+            <section id="tab-profile" class="dash-tab" role="tabpanel" hidden>
+                <div class="profile-grid">
+                    <div class="panel profile-card">
+                        <div class="avatar" id="pAvatar">A</div>
+                        <h2 id="pName" style="font-size:1.3rem;"></h2>
+                        <span class="pill pill-red" id="pRole"></span>
+                        <dl class="profile-facts" id="pFacts"></dl>
+                        <p class="private-note">🔒 Your email address and mobile number are private. Only you can see them here; they are never shown publicly.</p>
+                    </div>
+                    <div>
+                        <div class="panel">
+                            <h2 class="panel-title">Edit profile</h2>
+                            <div class="form-alert" id="pAlert" role="alert" hidden></div>
+                            <form id="profileForm" class="auth-form" novalidate>
+                                <div class="form-grid">
+                                    <div class="form-group full"><label for="pfName">Full name</label><input type="text" id="pfName" maxlength="60"></div>
+                                    <div class="form-group"><label for="pfDob">Date of birth</label><input type="date" id="pfDob"></div>
+                                    <div class="form-group"><label for="pfGender">Gender (optional)</label>
+                                        <select id="pfGender"><option value="">Prefer not to say</option><option value="female">Female</option><option value="male">Male</option><option value="other">Other</option></select></div>
+                                    <div class="form-group"><label for="pfEmail">Email address</label><input type="email" id="pfEmail"></div>
+                                    <div class="form-group"><label for="pfMobile">Mobile number</label><div class="mobile-wrap"><span>+91</span><input type="tel" id="pfMobile" inputmode="numeric" maxlength="14"></div></div>
+                                    <div class="form-group"><label for="pfState">State / Union Territory</label><select id="pfState"></select></div>
+                                    <div class="form-group"><label for="pfCity">City</label>
+                                        <input type="search" id="pfCitySearch" class="city-search" placeholder="Type to search city" autocomplete="off" aria-label="Search city"><select id="pfCity"></select></div>
+                                    <div class="form-group"><label for="pfPin">PIN code</label><input type="text" id="pfPin" inputmode="numeric" maxlength="6"></div>
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="pfSave">Save changes</button>
+                            </form>
+                        </div>
+                        <div class="panel" style="margin-top:20px;">
+                            <h2 class="panel-title">E-mail notifications</h2>
+                            <div class="location-status" id="nService" style="margin:0 0 14px;">Loading…</div>
+                            <p class="hint" style="margin-bottom:12px;"><b>Always sent</b> (essential): welcome e-mail, confirmations of the forms you submit, camp review updates, password and security notices.</p>
+                            <div class="form-alert" id="nAlert" role="alert" hidden></div>
+                            <form id="notifyForm" class="auth-form" novalidate>
+                                <label class="terms-row" for="nNearby"><input type="checkbox" id="nNearby"> <span><b>Optional:</b> e-mail me when a new verified blood donation camp is added near my PIN code</span></label>
+                                <div class="inline-row" style="align-items:center;">
+                                    <label for="nRadius" class="hint">Within</label>
+                                    <select id="nRadius" style="padding:8px 12px;border:1.5px solid var(--line);border-radius:10px;font:inherit;"><option value="10">10 km</option><option value="25">25 km</option><option value="50">50 km</option></select>
+                                    <button type="submit" class="btn btn-outline btn-sm">Save e-mail settings</button>
+                                </div>
+                            </form>
+                            <h3 style="font-size:1rem;margin:18px 0 4px;">Recent e-mails</h3>
+                            <dl class="profile-facts" id="nRecent" style="margin-top:0;"></dl>
+                        </div>
+                        <div class="panel" style="margin-top:20px;">
+                            <h2 class="panel-title">Change password</h2>
+                            <div class="form-alert" id="cpAlert" role="alert" hidden></div>
+                            <form id="passwordForm" class="auth-form" novalidate>
+                                <div class="form-grid">
+                                    <div class="form-group full"><label for="cpCurrent">Current password</label>
+                                        <div class="password-wrap"><input type="password" id="cpCurrent" autocomplete="current-password"><button type="button" class="pw-toggle" data-toggle-password="cpCurrent" aria-label="Show password">Show</button></div></div>
+                                    <div class="form-group"><label for="cpNew">New password</label>
+                                        <div class="password-wrap"><input type="password" id="cpNew" autocomplete="new-password"><button type="button" class="pw-toggle" data-toggle-password="cpNew" aria-label="Show password">Show</button></div></div>
+                                    <div class="form-group"><label for="cpConfirm">Confirm new password</label>
+                                        <div class="password-wrap"><input type="password" id="cpConfirm" autocomplete="new-password"><button type="button" class="pw-toggle" data-toggle-password="cpConfirm" aria-label="Show password">Show</button></div></div>
+                                </div>
+                                <button type="submit" class="btn btn-outline" id="cpSave">Change password</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">© 2026 LifeDrop · Blood Donation and Blood Camp Tracker · <a href="terms.html" style="color:inherit;text-decoration:underline;">Terms &amp; Privacy</a></div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/decor.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/india-locations.js"></script>
+    <script src="js/location-picker.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

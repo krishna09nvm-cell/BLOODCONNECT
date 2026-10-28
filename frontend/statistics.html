@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | LifeDrop Blood Donation Statistics</title>
+    <meta name="description" content="Live totals of donors, blood requests, donations and camps on LifeDrop. Aggregated numbers only.">
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <nav class="container nav-inner">
+            <a href="index.html" class="logo">
+                <span class="logo-drop"><span>+</span></span>
+                Life<b>Drop</b>
+            </a>
+
+            <!-- Hamburger (mobile only) -->
+            <button class="nav-toggle" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="statistics.html" class="active">Dashboard</a></li>
+                <li><a href="find-donor.html">Find Donor</a></li>
+                <li><a href="camps.html">Camps</a></li>
+                <li><a href="register.html">Become a Donor</a></li>
+                <li><a href="emergency.html" class="nav-emergency">Emergency</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <!-- ================= PAGE HEADER ================= -->
+    <section class="page-header" data-floaters="6">
+        <div class="container ph-has-art"><div class="ph-art" data-art="stats"></div>
+            <h1>Dashboard</h1>
+            <p>LifeDrop at a glance: donors, blood requests, donations, camps and accounts. Only totals are shown, never names or phone numbers.</p>
+            <ul class="ph-chips" aria-label="Highlights"><li>📊 Live from the website's records</li><li>🔒 Aggregated numbers only</li><li>🧮 Duplicates removed</li></ul>
+        </div>
+    </section>
+
+    <!-- ================= PUBLIC DASHBOARD (js/stats.js) ================= -->
+    <main class="container st-page pull-up">
+        <div data-public-stats></div>
+    </main>
+
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="logo"><span class="logo-drop"><span>+</span></span> Life<b>Drop</b></a>
+                    <p>Blood Donation &amp; Emergency Donor Finder. A college mini project connecting donors with people in need.</p>
+                </div>
+                <div>
+                    <h4>Quick links</h4>
+                    <ul>
+                        <li><a href="statistics.html">Dashboard</a></li>
+                        <li><a href="find-donor.html">Find Donor</a></li>
+                        <li><a href="camps.html">Blood Donation Camps</a></li>
+                        <li><a href="register.html">Become a Donor</a></li>
+                        <li><a href="emergency.html">Emergency Requests</a></li>
+                        <li><a href="index.html#feedback" class="fb-link">Give feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Emergency</h4>
+                    <ul>
+                        <li>Ambulance: 108</li>
+                        <li>National Emergency: 112</li>
+                        <li><a href="emergency.html">Post a blood request →</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">© 2026 LifeDrop · Made with ❤ for a college mini project</div>
+        </div>
+    </footer>
+
+    <!-- Chart.js (charts) from cdnjs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/decor.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/stats.js"></script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Requests | LifeDrop</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <nav class="container nav-inner">
+            <a href="index.html" class="logo">
+                <span class="logo-drop"><span>+</span></span>
+                Life<b>Drop</b>
+            </a>
+            <button class="nav-toggle" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="statistics.html">Dashboard</a></li>
+                <li><a href="find-donor.html">Find Donor</a></li>
+                <li><a href="camps.html">Camps</a></li>
+                <li><a href="register.html">Become a Donor</a></li>
+                <li><a href="emergency.html" class="nav-emergency active">Emergency</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <!-- ================= PAGE HEADER ================= -->
+    <section class="page-header is-emergency" data-floaters="6">
+        <div class="container ph-has-art"><div class="ph-art" data-art="sos"></div>
+            <h1>Emergency Blood Requests</h1>
+            <p>Post a request when a patient urgently needs blood, and help others by responding to open requests.</p><ul class="ph-chips" aria-label="Highlights"><li>🚑 Ambulance: 108</li><li>📞 National emergency: 112</li><li>🩸 Open requests listed below</li></ul>
+        </div>
+    </section>
+
+
+    <div class="container sos-bar pull-up" role="region" aria-label="Quick emergency actions">
+        <div class="sos-symbol" data-art="sos" data-art-hidden></div>
+        <div class="sos-text"><b>Need blood right now?</b><span>Call the hospital's blood bank first. These shortcuts help you find donors and blood banks fast.</span></div>
+        <div class="sos-actions">
+            <a class="btn btn-primary" href="find-donor.html"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20.5 20.5-4.3-4.3"/></svg> Find donors nearby</a>
+            <a class="btn btn-light" href="camps.html?view=banks"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="3" width="12" height="14.5" rx="3.5"/><path d="M12 17.5V21"/><path d="M9.3 10.2h5.4M12 7.5v5.4"/></svg> Blood banks near me</a>
+            <a class="btn btn-outline sos-call" href="tel:108" aria-label="Call ambulance, 108"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 17h4V6H2v11h2.5"/><path d="M14 9h4.5l3.5 4.5V17h-1.5"/><circle cx="7.5" cy="17.5" r="2.2"/><circle cx="17.5" cy="17.5" r="2.2"/><path d="M6 9.5v4M4 11.5h4"/></svg> Call 108</a>
+        </div>
+    </div>
+
+    <div class="container emergency-layout after-sos">
+
+        <!-- ================= CREATE REQUEST FORM ================= -->
+        <form class="panel" id="requestForm" novalidate>
+            <h2 class="panel-title"><span class="critical-dot"></span> New emergency request</h2>
+
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label for="patientName">Patient name <span class="req">*</span></label>
+                    <input type="text" id="patientName" placeholder="e.g. Suresh Kumar">
+                </div>
+
+                <div class="form-group">
+                    <label for="reqBloodGroup">Blood group <span class="req">*</span></label>
+                    <select id="reqBloodGroup">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="units">Units needed <span class="req">*</span></label>
+                    <input type="number" id="units" min="1" max="10" value="1">
+                </div>
+
+                <div class="form-group full">
+                    <label for="hospital">Hospital <span class="req">*</span></label>
+                    <input type="text" id="hospital" placeholder="e.g. KMC Hospital, Attavar">
+                </div>
+
+                <!-- State / City dropdowns are filled by js/location-picker.js -->
+                <div class="form-group">
+                    <label for="reqState">State / Union Territory <span class="req">*</span></label>
+                    <select id="reqState"></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="reqCity">City <span class="req">*</span></label>
+                    <input type="search" id="reqCitySearch" class="city-search" placeholder="Type to search city" autocomplete="off" aria-label="Search city">
+                    <select id="reqCity"></select>
+                </div>
+
+                <div class="form-group full">
+                    <label for="contactPhone">Contact phone <span class="req">*</span></label>
+                    <input type="tel" id="contactPhone" maxlength="10" placeholder="10 digits">
+                </div>
+
+                <div class="form-group full">
+                    <label>Urgency <span class="req">*</span></label>
+                    <div class="chips">
+                        <input type="radio" name="urgency" id="u1" value="Critical" checked>
+                        <label for="u1">Critical</label>
+                        <input type="radio" name="urgency" id="u2" value="Urgent">
+                        <label for="u2">Urgent</label>
+                        <input type="radio" name="urgency" id="u3" value="Normal">
+                        <label for="u3">Normal</label>
+                    </div>
+                </div>
+
+                <div class="form-group full">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" placeholder="e.g. Needed before 6 PM, accident case"></textarea>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-block btn-glow" type="submit" style="margin-top:20px;" id="requestSubmit">
+                Post Emergency Request
+            </button>
+        </form>
+
+
+        <!-- ================= REQUEST LIST ================= -->
+        <div class="panel">
+            <div class="results-head">
+                <h2 class="panel-title" style="margin:0;">Requests</h2>
+                <div class="tabs" id="statusTabs">
+                    <button type="button" data-status="Open" class="active">Open</button>
+                    <button type="button" data-status="Fulfilled">Fulfilled</button>
+                    <button type="button" data-status="">All</button>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:16px;">
+                <select id="listBloodGroup" aria-label="Filter by blood group">
+                    <option value="">All blood groups</option>
+                </select>
+            </div>
+
+            <div id="requestList" style="display:flex;flex-direction:column;gap:14px;"></div>
+        </div>
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="logo"><span class="logo-drop"><span>+</span></span> Life<b>Drop</b></a>
+                    <p>Blood Donation &amp; Emergency Donor Finder. A college mini project connecting donors with people in need.</p>
+                </div>
+                <div>
+                    <h4>Quick links</h4>
+                    <ul>
+                        <li><a href="statistics.html">Dashboard</a></li>
+                        <li><a href="find-donor.html">Find Donor</a></li>
+                        <li><a href="camps.html">Blood Donation Camps</a></li>
+                        <li><a href="register.html">Become a Donor</a></li>
+                        <li><a href="emergency.html">Emergency Requests</a></li>
+                        <li><a href="index.html#feedback" class="fb-link">Give feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Emergency</h4>
+                    <ul>
+                        <li>Ambulance: 108</li>
+                        <li>National Emergency: 112</li>
+                        <li><a href="emergency.html">Post a blood request →</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">© 2026 LifeDrop · Made with ❤ for a college mini project</div>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
+    <script src="js/decor.js"></script>
+    <script src="js/feedback.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/india-locations.js"></script>
+    <script src="js/location-picker.js"></script>
+    <script src="js/emergency.js"></script>
+</body>
+</html>

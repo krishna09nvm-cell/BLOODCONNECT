@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Blood Donation and Blood Camp Tracker</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page" data-no-account-link>
+
+    <header class="navbar">
+        <nav class="container nav-inner">
+            <a href="welcome.html" class="logo"><span class="logo-drop"><span>+</span></span>Life<b>Drop</b></a>
+            <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="statistics.html">Dashboard</a></li>
+                <li><a href="camps.html">Find Camps</a></li>
+                <li><a href="camps.html?view=banks">Blood Banks</a></li>
+                <li><a href="login.html" class="active">Login</a></li>
+                <li><a href="signup.html" class="nav-emergency">Create Account</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="auth-shell narrow">
+        <aside class="auth-side" data-floaters="6">
+            <div class="auth-art" data-art="auth"></div>
+            <h2>Welcome back!</h2>
+            <p>Log in to see your dashboard.</p>
+            <ul>
+                <li>Camps near your PIN code</li>
+                <li>Blood banks and hospitals on the map</li>
+                <li>Manage the camps you organise</li>
+            </ul>
+        </aside>
+
+        <section class="auth-main">
+            <h1>Login</h1>
+            <p class="sub">Use the email address or mobile number you registered with.</p>
+
+            <div class="form-alert" id="loginAlert" role="alert" hidden></div>
+
+            <form class="auth-form" id="loginForm" novalidate>
+                <div class="form-group">
+                    <label for="loginId">Email address or mobile number <span class="req">*</span></label>
+                    <input type="text" id="loginId" autocomplete="username" placeholder="name@example.com or 98450 12345">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password <span class="req">*</span></label>
+                    <div class="password-wrap">
+                        <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Your password">
+                        <button type="button" class="pw-toggle" data-toggle-password="loginPassword" aria-label="Show password" aria-pressed="false">Show</button>
+                    </div>
+                </div>
+                <div class="auth-row">
+                    <label class="check-row" for="remember"><input type="checkbox" id="remember"> Remember me</label>
+                    <a href="forgot-password.html" class="text-link-red">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="loginBtn">Login</button>
+            </form>
+
+            <p class="auth-switch">New here? <a href="signup.html">Create a new account</a></p>
+            <p class="auth-switch"><a href="index.html" style="color:var(--muted);font-weight:600;">Continue without an account →</a></p>
+        </section>
+    </main>
+
+    <script src="js/common.js"></script>
+    <script src="js/decor.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const params = new URLSearchParams(location.search);
+        const alertBox = document.getElementById("loginAlert");
+        const idInput = document.getElementById("loginId");
+        const pwInput = document.getElementById("loginPassword");
+        setupPasswordToggles();
+
+        if (params.get("loggedOut")) showFormAlert(alertBox, "You have been logged out. See you soon!", "success");
+        if (params.get("reset")) showFormAlert(alertBox, "Your password was changed. Please log in with the new password.", "success");
+        if (params.get("next")) showFormAlert(alertBox, "Please log in to open your dashboard.", "info");
+
+        // Already logged in? Go straight to the dashboard
+        currentUser().then(user => { if (user) location.replace(safeNext(params.get("next"))); });
+
+        document.getElementById("loginForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            const form = event.target;
+            clearFieldErrors(form);
+            showFormAlert(alertBox, "");
+
+            let ok = true;
+            const login = idInput.value.trim();
+            if (!login) { setFieldError(idInput, "Please enter your email address or mobile number."); ok = false; }
+            else if (login.includes("@") ? RULES.email(login) : RULES.mobile(login)) {
+                setFieldError(idInput, login.includes("@") ? RULES.email(login) : RULES.mobile(login)); ok = false;
+            }
+            if (!pwInput.value) { setFieldError(pwInput, "Please enter your password."); ok = false; }
+            if (!ok) return;
+
+            const button = document.getElementById("loginBtn");
+            button.disabled = true; button.textContent = "Logging in…";
+            try {
+                const data = await authRequest("/auth/login", { method: "POST", body: { login, password: pwInput.value, remember: document.getElementById("remember").checked } });
+                showFormAlert(alertBox, data.message, "success");
+                location.href = safeNext(params.get("next"));
+            } catch (error) {
+                showFormAlert(alertBox, escapeHtml(error.message), "error");
+                pwInput.value = ""; pwInput.focus();
+            } finally {
+                button.disabled = false; button.textContent = "Login";
+            }
+        });
+    </script>
+</body>
+</html>

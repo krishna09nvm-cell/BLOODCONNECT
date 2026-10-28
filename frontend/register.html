@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Become a Donor | LifeDrop</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <nav class="container nav-inner">
+            <a href="index.html" class="logo">
+                <span class="logo-drop"><span>+</span></span>
+                Life<b>Drop</b>
+            </a>
+            <button class="nav-toggle" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="statistics.html">Dashboard</a></li>
+                <li><a href="find-donor.html">Find Donor</a></li>
+                <li><a href="camps.html">Camps</a></li>
+                <li><a href="register.html" class="active">Become a Donor</a></li>
+                <li><a href="emergency.html" class="nav-emergency">Emergency</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <!-- ================= PAGE HEADER ================= -->
+    <section class="page-header" data-floaters="6">
+        <div class="container has-bindu ph-has-art"><div class="ph-art" data-art="register"></div>
+            <span data-drop-mascot="donor" class="bindu-header"></span>
+            <!-- Text changes to "Update Donor" in edit mode (see register.js) -->
+            <h1 id="pageTitle">Become a Blood Donor</h1>
+            <p id="pageSubtitle">Register in under a minute. Your location helps people nearby find you in an emergency.</p><ul class="ph-chips" aria-label="Highlights"><li>⏱️ Takes about a minute</li><li>🔒 Location rounded to about 1 km</li><li>❤️ Help people near you</li></ul>
+        </div>
+    </section>
+
+
+    <!-- ================= FORM ================= -->
+    <div class="container">
+        <form class="panel" id="donorForm" style="margin-top:-32px;position:relative;z-index:5;" novalidate>
+
+            <h2 class="panel-title">Personal details</h2>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="name">Full name <span class="req">*</span></label>
+                    <input type="text" id="name" placeholder="e.g. Rahul Shetty" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age <span class="req">*</span></label>
+                    <input type="number" id="age" min="18" max="65" placeholder="18 - 65" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bloodGroup">Blood group <span class="req">*</span></label>
+                    <select id="bloodGroup" required>
+                        <option value="">Select blood group</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone number <span class="req">*</span></label>
+                    <input type="tel" id="phone" maxlength="10" placeholder="10-digit mobile number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="availability">Availability <span class="req">*</span></label>
+                    <select id="availability" required>
+                        <option value="Available">Available</option>
+                        <option value="Not Available">Not Available</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="otherInfo">Other info</label>
+                    <input type="text" id="otherInfo" placeholder="e.g. Last donated in June">
+                </div>
+            </div>
+
+
+            <h2 class="panel-title" style="margin-top:32px;">Your location</h2>
+
+            <div class="form-grid">
+                <!-- State / City dropdowns are filled by js/location-picker.js -->
+                <div class="form-group">
+                    <label for="state">State / Union Territory <span class="req">*</span></label>
+                    <select id="state" required></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City <span class="req">*</span></label>
+                    <input type="search" id="citySearch" class="city-search" placeholder="Type to search city" autocomplete="off" aria-label="Search city">
+                    <select id="city" required></select>
+                    <span class="hint" id="cityCount"></span>
+                </div>
+
+                <div class="form-group full">
+                    <div class="inline-row">
+                        <button type="button" class="btn btn-outline" id="locateCityBtn">Show my city on the map</button>
+                        <button type="button" class="btn btn-primary" id="myLocationBtn">Use my current location</button>
+                    </div>
+                    <span class="hint">Then click on the map or drag the pin to your location. It is used only to measure distance: visitors see an approximate area (about 1 km), never your exact location.</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="latitude">Latitude</label>
+                    <input type="text" id="latitude" readonly placeholder="Set using the map">
+                </div>
+
+                <div class="form-group">
+                    <label for="longitude">Longitude</label>
+                    <input type="text" id="longitude" readonly placeholder="Set using the map">
+                </div>
+            </div>
+
+            <div class="reg-map-box">
+                <div id="regMap"></div>
+            </div>
+
+            <div class="inline-row" style="margin-top:28px;">
+                <button type="submit" class="btn btn-primary btn-glow" id="submitBtn">Register as Donor</button>
+                <a href="find-donor.html#all-donors" class="btn btn-light" id="cancelBtn">View all donors</a>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="logo"><span class="logo-drop"><span>+</span></span> Life<b>Drop</b></a>
+                    <p>Blood Donation &amp; Emergency Donor Finder. A college mini project connecting donors with people in need.</p>
+                </div>
+                <div>
+                    <h4>Quick links</h4>
+                    <ul>
+                        <li><a href="statistics.html">Dashboard</a></li>
+                        <li><a href="find-donor.html">Find Donor</a></li>
+                        <li><a href="camps.html">Blood Donation Camps</a></li>
+                        <li><a href="register.html">Become a Donor</a></li>
+                        <li><a href="emergency.html">Emergency Requests</a></li>
+                        <li><a href="index.html#feedback" class="fb-link">Give feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Emergency</h4>
+                    <ul>
+                        <li>Ambulance: 108</li>
+                        <li>National Emergency: 112</li>
+                        <li><a href="emergency.html">Post a blood request →</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">© 2026 LifeDrop · Made with ❤ for a college mini project</div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/decor.js"></script>
+    <script src="js/feedback.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/mascot.js"></script>
+    <script src="js/india-locations.js"></script>
+    <script src="js/location-picker.js"></script>
+    <script src="js/register.js"></script>
+</body>
+</html>

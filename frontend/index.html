@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LifeDrop | Blood Donation & Emergency Donor Finder</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="navbar">
+        <nav class="container nav-inner">
+            <a href="index.html" class="logo">
+                <span class="logo-drop"><span>+</span></span>
+                Life<b>Drop</b>
+            </a>
+
+            <!-- Hamburger (mobile only) -->
+            <button class="nav-toggle" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="statistics.html">Dashboard</a></li>
+                <li><a href="find-donor.html">Find Donor</a></li>
+                <li><a href="camps.html">Camps</a></li>
+                <li><a href="register.html">Become a Donor</a></li>
+                <li><a href="emergency.html" class="nav-emergency">Emergency</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <!-- ================= HERO ================= -->
+    <section class="hero" data-floaters="8">
+        <div class="container hero-grid">
+
+            <div class="hero-text">
+                <span class="eyebrow">🩸 Every drop counts</span>
+                <h1>Save a Life. <span>Find a Donor in Minutes.</span></h1>
+                <p>
+                    Connect with verified blood donors near you. Search by blood group
+                    and distance, or post an emergency request when every minute matters.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="find-donor.html" class="btn btn-primary" data-mascot-point="Search donors near you!">Find Donor</a>
+                    <a href="camps.html" class="btn btn-light" data-mascot-point="Find a blood camp near your PIN code!" data-mascot-cheer="Great! Let's find a camp 👍">Find Blood Camp</a>
+                    <a href="register.html" class="btn btn-outline" data-mascot-point="Be a Hero, Donate Blood!" data-mascot-cheer="Thank you, hero! 👍">Become a Donor</a>
+                </div>
+
+                <!-- Quick search: sends the user to find-donor.html?bloodGroup=..&state=..&city=.. -->
+                <form class="quick-search" id="quickSearch">
+                    <select id="qsBloodGroup" aria-label="Blood group">
+                        <option value="">Any blood group</option>
+                    </select>
+                    <!-- State / City dropdowns are filled by js/location-picker.js -->
+                    <select id="qsState" aria-label="State or Union Territory"></select>
+                    <input type="search" id="qsCitySearch" class="city-search" placeholder="Type to search city" aria-label="Search city" autocomplete="off">
+                    <select id="qsCity" aria-label="City"></select>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </form>
+                <p class="life-chip"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 20.5s-8.5-5-8.5-11.2A4.8 4.8 0 0 1 12 6.4a4.8 4.8 0 0 1 8.5 2.9c0 6.2-8.5 11.2-8.5 11.2z"/></svg> One blood donation can help save up to three lives</p>
+            </div>
+
+            <!-- Dr. Asha, the animated doctor (js/mascot.js). Click her to chat with the AI Assistant. -->
+            <div class="hero-visual has-doctor">
+                <div class="pulse-ring" aria-hidden="true"></div>
+                <div class="pulse-ring delay" aria-hidden="true"></div>
+                <div data-doctor></div>
+                <div class="float-card one" aria-hidden="true">
+                    <span class="pill pill-red">O-</span>
+                    <div><strong>Donor found</strong><small>2.4 km away</small></div>
+                </div>
+                <div class="float-card two" aria-hidden="true">
+                    <span class="critical-dot"></span>
+                    <div><strong>Emergency request</strong><small>KMC Hospital · 2 units</small></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= STATS ================= -->
+    <section class="stats">
+        <div class="container stats-grid">
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg>
+                </div>
+                <div class="stat-number" data-stat="totalDonors">0</div>
+                <div class="stat-label">Registered donors</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14l-3-3"/></svg>
+                </div>
+                <div class="stat-number" data-stat="availableDonors">0</div>
+                <div class="stat-label">Available now</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+                </div>
+                <div class="stat-number" data-stat="emergencyRequests">0</div>
+                <div class="stat-label">Emergency requests</div>
+            </div>
+            <div class="stat-card reveal">
+                <div class="stat-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <div class="stat-number" data-stat="cities">0</div>
+                <div class="stat-label">Cities covered</div>
+            </div>
+        </div>
+        <!-- Shown when demo (fictional) records are loaded - see home.js -->
+        <p class="container hint demo-note" id="demoNote" hidden></p>
+    </section>
+
+
+    <!-- ================= HOW IT WORKS ================= -->
+    <section class="section">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="eyebrow">How it works</span>
+                <h2>Three simple steps to save a life</h2>
+                <p>From registration to donation, the whole process takes just a few minutes.</p>
+            </div>
+
+            <div class="steps-grid">
+                <div class="step-card reveal">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+                    </div>
+                    <h3>Register as a donor</h3>
+                    <p>Fill in your blood group, phone number and pin your location on the map.</p>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                    </div>
+                    <h3>Search donors &amp; blood banks</h3>
+                    <p>Use your current location or a city. See donors and blood banks nearest first, with the distance in km.</p>
+                </div>
+                <div class="step-card reveal">
+                    <div class="step-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+                    </div>
+                    <h3>Connect &amp; donate</h3>
+                    <p>Call the nearest donor directly and get blood to the patient faster.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= BLOOD GROUPS ================= -->
+    <section class="section section-tint">
+        <div class="container">
+            <div class="section-head reveal">
+                <span class="eyebrow">Blood groups</span>
+                <h2>Find donors by blood group</h2>
+                <p>Tap a blood group to see matching donors. Each card shows who it can give to and receive from (red cells, ABO/Rh).
+                   <a href="find-donor.html#demo-profiles" class="text-link">Learn about universal donors and rare blood groups →</a></p>
+            </div>
+
+            <!-- Cards are generated by js/home.js -->
+            <div class="blood-grid" id="bloodGrid"></div>
+        </div>
+    </section>
+
+
+    <!-- ================= CALL TO ACTION ================= -->
+    <section class="section">
+        <div class="container">
+            <div class="cta-band reveal" data-floaters="4">
+                <div>
+                    <h2>Need blood urgently?</h2>
+                    <p>Post an emergency request so nearby donors can respond quickly.</p>
+                </div>
+                <a href="emergency.html" class="btn btn-white">Create Emergency Request</a>
+            </div>
+            <div class="cta-band camp-cta reveal" data-floaters="4">
+                <span data-drop-mascot="camp"></span>
+                <div>
+                    <h2>Want to donate at a camp?</h2>
+                    <p>Find verified blood donation camps near you, with dates, times and directions.</p>
+                </div>
+                <a href="camps.html" class="btn btn-white">Find Blood Donation Camps</a>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================= FEEDBACK FORM (js/feedback.js) ================= -->
+    <section class="section feedback-section" id="feedback">
+        <div class="container"><div data-feedback="home"></div></div>
+    </section>
+
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <a href="index.html" class="logo"><span class="logo-drop"><span>+</span></span> Life<b>Drop</b></a>
+                    <p>Blood Donation &amp; Emergency Donor Finder. A college mini project connecting donors with people in need.</p>
+                </div>
+                <div>
+                    <h4>Quick links</h4>
+                    <ul>
+                        <li><a href="statistics.html">Dashboard</a></li>
+                        <li><a href="find-donor.html">Find Donor</a></li>
+                        <li><a href="camps.html">Blood Donation Camps</a></li>
+                        <li><a href="register.html">Become a Donor</a></li>
+                        <li><a href="emergency.html">Emergency Requests</a></li>
+                        <li><a href="index.html#feedback" class="fb-link">Give feedback</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Emergency</h4>
+                    <ul>
+                        <li>Ambulance: 108</li>
+                        <li>National Emergency: 112</li>
+                        <li><a href="emergency.html">Post a blood request →</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">© 2026 LifeDrop · Made with ❤ for a college mini project</div>
+        </div>
+    </footer>
+
+    <script src="js/common.js"></script>
+    <script src="js/decor.js"></script>
+    <script src="js/feedback.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/mascot.js"></script>
+    <script src="js/india-locations.js"></script>
+    <script src="js/location-picker.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>

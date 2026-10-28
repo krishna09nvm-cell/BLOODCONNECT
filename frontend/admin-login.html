@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Login | LifeDrop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<!-- Admin login. This page is NOT linked from the public website.
+     Admin accounts are created on the server with:  npm run create-admin
+     The password is checked on the server; nothing secret is in this file. -->
+<body class="auth-page admin-login-page">
+    <main class="auth-shell narrow">
+        <aside class="auth-side" data-floaters="6">
+            <div class="auth-art" data-art="terms"></div>
+            <h2>Admin analytics</h2>
+            <p>For the LifeDrop team only.</p>
+            <ul>
+                <li>Impact charts and reports</li>
+                <li>Verify donors, donations and matches</li>
+                <li>Approve or reject camp submissions</li>
+            </ul>
+        </aside>
+        <section class="auth-main">
+            <a href="index.html" class="logo admin-login-logo"><span class="logo-drop"><span>+</span></span>Life<b>Drop</b></a>
+            <h1>Admin login</h1>
+            <p class="sub">Use the admin account created on the server. Normal donor, finder and organizer accounts can't sign in here.</p>
+            <div class="form-alert" id="adminAlert" role="alert" hidden></div>
+            <form class="auth-form" id="adminLoginForm" novalidate>
+                <div class="form-group"><label for="adminEmail">Admin e-mail</label><input type="email" id="adminEmail" autocomplete="username" required></div>
+                <div class="form-group">
+                    <label for="adminPassword">Password</label>
+                    <div class="password-wrap"><input type="password" id="adminPassword" autocomplete="current-password" required><button type="button" class="pw-toggle" id="adminPwToggle" aria-label="Show password">Show</button></div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="adminLoginBtn">Log in to the dashboard</button>
+            </form>
+            <p class="auth-switch">Not an admin? <a href="index.html">Go to the website</a></p>
+            <p class="hint admin-login-note">🔒 5 wrong passwords lock the account for 15 minutes. Sessions end after 8 hours.</p>
+        </section>
+    </main>
+    <script src="js/decor.js"></script>
+    <script>
+    (function () {
+        const API = location.protocol.startsWith("http") ? `${location.origin}/api/admin` : "http://localhost:5000/api/admin";
+        const alertBox = document.getElementById("adminAlert"), btn = document.getElementById("adminLoginBtn");
+        const show = (msg, type) => { alertBox.textContent = msg; alertBox.className = "form-alert " + (type || "error"); alertBox.hidden = false; };
+        // Already logged in as admin? Go straight to the dashboard.
+        fetch(API + "/me", { credentials: "same-origin" }).then(r => { if (r.ok) location.replace("admin.html"); }).catch(() => { });
+        document.getElementById("adminPwToggle").addEventListener("click", e => {
+            const input = document.getElementById("adminPassword"), hidden = input.type === "password";
+            input.type = hidden ? "text" : "password"; e.target.textContent = hidden ? "Hide" : "Show";
+            e.target.setAttribute("aria-label", hidden ? "Hide password" : "Show password");
+        });
+        document.getElementById("adminLoginForm").addEventListener("submit", async e => {
+            e.preventDefault();
+            const email = document.getElementById("adminEmail").value.trim(), password = document.getElementById("adminPassword").value;
+            if (!email || !password) return show("Please enter your admin e-mail and password.");
+            btn.disabled = true; btn.textContent = "Checking…";
+            try {
+                const res = await fetch(API + "/login", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, password }) });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) throw new Error(data.message || "Login failed.");
+                show(data.message || "Welcome!", "success");
+                location.href = "admin.html";
+            } catch (er) {
+                show(er.message === "Failed to fetch" ? "Can't reach the server. Is it running (npm start)?" : er.message);
+                btn.disabled = false; btn.textContent = "Log in to the dashboard";
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

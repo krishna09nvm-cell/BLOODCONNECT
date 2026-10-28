@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Blood Donation and Blood Camp Tracker</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page" data-no-account-link>
+
+    <header class="navbar">
+        <nav class="container nav-inner">
+            <a href="welcome.html" class="logo"><span class="logo-drop"><span>+</span></span>Life<b>Drop</b></a>
+            <button class="nav-toggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="statistics.html">Dashboard</a></li>
+                <li><a href="camps.html">Find Camps</a></li>
+                <li><a href="camps.html?view=banks">Blood Banks</a></li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="signup.html" class="nav-emergency active">Create Account</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="auth-shell">
+        <aside class="auth-side" data-floaters="6">
+            <div class="auth-art" data-art="auth"></div>
+            <h2>Create your free account</h2>
+            <p>Find Blood. Donate Blood. Save Lives.</p>
+            <ul>
+                <li>Your password is stored only as a secure hash</li>
+                <li>Your email and mobile number are never shown publicly</li>
+                <li>Change your details any time in your profile</li>
+            </ul>
+        </aside>
+
+        <section class="auth-main">
+            <h1>Create Account</h1>
+            <p class="sub">Fields marked <span style="color:var(--red)">*</span> are required.</p>
+
+            <div class="form-alert" id="signupAlert" role="alert" hidden></div>
+
+            <form class="auth-form" id="signupForm" novalidate>
+                <!-- Role -->
+                <div class="form-group">
+                    <span class="label">I am a <span class="req">*</span></span>
+                    <div class="role-options" role="radiogroup" aria-label="User role">
+                        <div class="role-option"><input type="radio" name="role" id="roleDonor" value="donor"><label for="roleDonor"><span class="ri"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5C9 7.5 5.5 10.8 5.5 15a6.5 6.5 0 0 0 13 0c0-4.2-3.5-7.5-6.5-12.5z" fill="currentColor"/></svg></span>Blood Donor<small>I want to donate</small></label></div>
+                        <div class="role-option"><input type="radio" name="role" id="roleFinder" value="finder"><label for="roleFinder"><span class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></span>Blood Finder<small>I need blood</small></label></div>
+                        <div class="role-option"><input type="radio" name="role" id="roleOrganizer" value="organizer"><label for="roleOrganizer"><span class="ri"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 20 12 5l9 15z"/><path d="M12 20v-6l-3 6M12 14l3 6"/><path d="M2 20h20"/></svg></span>Camp Organizer<small>I run camps</small></label></div>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label for="suName">Full name <span class="req">*</span></label>
+                        <input type="text" id="suName" autocomplete="name" placeholder="e.g. Ananya Rao" maxlength="60">
+                    </div>
+                    <div class="form-group">
+                        <label for="suDob">Date of birth <span class="req">*</span></label>
+                        <input type="date" id="suDob" autocomplete="bday">
+                        <small class="hint" id="suAgeHint">You must be 18 or older. Donors: 18–65.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="suGender">Gender <span class="hint">(optional)</span></label>
+                        <select id="suGender">
+                            <option value="">Prefer not to say</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="suEmail">Email address <span class="req">*</span></label>
+                        <input type="email" id="suEmail" autocomplete="email" placeholder="name@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="suMobile">Mobile number <span class="req">*</span></label>
+                        <div class="mobile-wrap"><span>+91</span><input type="tel" id="suMobile" inputmode="numeric" autocomplete="tel-national" placeholder="98450 12345" maxlength="14"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="suState">State / Union Territory <span class="req">*</span></label>
+                        <select id="suState"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="suCity">City <span class="req">*</span></label>
+                        <input type="search" id="suCitySearch" class="city-search" placeholder="Type to search city" autocomplete="off" aria-label="Search city">
+                        <select id="suCity"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="suPin">PIN code <span class="req">*</span></label>
+                        <input type="text" id="suPin" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="575001">
+                    </div>
+                    <div class="form-group"></div>
+                    <div class="form-group">
+                        <label for="suPassword">Create password <span class="req">*</span></label>
+                        <div class="password-wrap">
+                            <input type="password" id="suPassword" autocomplete="new-password" placeholder="At least 8 characters">
+                            <button type="button" class="pw-toggle" data-toggle-password="suPassword" aria-label="Show password" aria-pressed="false">Show</button>
+                        </div>
+                        <div class="strength"><div class="strength-bar" id="suStrength"></div><span id="suStrengthText"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="suConfirm">Confirm password <span class="req">*</span></label>
+                        <div class="password-wrap">
+                            <input type="password" id="suConfirm" autocomplete="new-password" placeholder="Type it again">
+                            <button type="button" class="pw-toggle" data-toggle-password="suConfirm" aria-label="Show password" aria-pressed="false">Show</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="terms-row" for="suNotify">
+                        <input type="checkbox" id="suNotify">
+                        <span><b>Optional:</b> e-mail me when a new blood donation camp is added near my PIN code. <span class="hint">You can turn this off any time. Account and form confirmation e-mails are always sent.</span></span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label class="terms-row" for="suTerms">
+                        <input type="checkbox" id="suTerms">
+                        <span>I accept the <a href="terms.html" target="_blank" class="text-link-red">Terms and Conditions</a> and the <a href="terms.html#privacy" target="_blank" class="text-link-red">Privacy Policy</a>. <span class="req">*</span></span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-glow" id="signupBtn">Create Account</button>
+            </form>
+
+            <p class="auth-switch">Already have an account? <a href="login.html">Login</a></p>
+        </section>
+    </main>
+
+    <script src="js/common.js"></script>
+    <script src="js/decor.js"></script>
+    <script src="js/chatbot.js"></script>
+    <script src="js/india-locations.js"></script>
+    <script src="js/location-picker.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        const $ = id => document.getElementById(id);
+        const alertBox = $("signupAlert");
+        const picker = setupLocationPicker({ stateId: "suState", cityId: "suCity", searchId: "suCitySearch" });
+        setupPasswordToggles();
+        setupStrengthMeter($("suPassword"), $("suStrength"), $("suStrengthText"));
+
+        // Latest date of birth allowed = 18 years ago
+        const today = new Date();
+        $("suDob").max = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate()).toISOString().slice(0, 10);
+        $("suDob").min = new Date(today.getFullYear() - 100, today.getMonth(), today.getDate()).toISOString().slice(0, 10);
+        $("suDob").addEventListener("change", () => {
+            const age = ageFrom($("suDob").value);
+            $("suAgeHint").textContent = age === null ? "You must be 18 or older. Donors: 18–65." : `Age: ${age} years`;
+        });
+        $("suPin").addEventListener("input", () => { $("suPin").value = $("suPin").value.replace(/\D/g, "").slice(0, 6); });
+
+        // Check one field; returns the message ("" when fine)
+        function checkField(id) {
+            const input = $(id), v = input.value;
+            let msg = "";
+            switch (id) {
+                case "suName": msg = v.trim() ? RULES.fullName(v) : "Please enter your full name."; break;
+                case "suDob": {
+                    const age = ageFrom(v);
+                    const role = document.querySelector('input[name="role"]:checked');
+                    msg = age === null ? "Please enter your date of birth." : age < 18 ? "You must be at least 18 years old." : age > 100 ? "Please check your date of birth."
+                        : role && role.value === "donor" && age > 65 ? "Blood donors must be between 18 and 65 years old." : "";
+                    break;
+                }
+                case "suEmail": msg = v.trim() ? RULES.email(v) : "Please enter your email address."; break;
+                case "suMobile": msg = v.trim() ? RULES.mobile(v) : "Please enter your mobile number."; break;
+                case "suState": msg = picker.getState() ? "" : "Please select your state or union territory."; break;
+                case "suCity": msg = picker.getCity() ? "" : "Please select your city."; break;
+                case "suPin": msg = v.trim() ? RULES.pincode(v) : "Please enter your PIN code."; break;
+                case "suPassword": msg = v ? RULES.password(v) : "Please create a password."; break;
+                case "suConfirm": msg = !v ? "Please type your password again." : v !== $("suPassword").value ? "The two passwords do not match." : ""; break;
+            }
+            setFieldError(input, msg);
+            return msg;
+        }
+        const FIELDS = ["suName", "suDob", "suEmail", "suMobile", "suState", "suCity", "suPin", "suPassword", "suConfirm"];
+        FIELDS.forEach(id => $(id).addEventListener("blur", () => { if ($(id).value) checkField(id); }));
+
+        $("signupForm").addEventListener("submit", async event => {
+            event.preventDefault();
+            showFormAlert(alertBox, "");
+            const problems = [];
+            const role = document.querySelector('input[name="role"]:checked');
+            if (!role) problems.push("Please choose your role: Blood Donor, Blood Finder or Camp Organizer.");
+            FIELDS.forEach(id => { if (checkField(id)) problems.push(id); });
+            if (!$("suTerms").checked) problems.push("Please accept the Terms and Conditions and the Privacy Policy.");
+            if (problems.length) {
+                const general = problems.filter(p => !p.startsWith("su"));
+                showFormAlert(alertBox, general.length ? general.map(escapeHtml).join("<br>") : "Please correct the highlighted fields.");
+                const firstBad = document.querySelector("#signupForm .invalid");
+                if (firstBad) firstBad.focus();
+                return;
+            }
+
+            const button = $("signupBtn");
+            button.disabled = true; button.textContent = "Creating your account…";
+            try {
+                const data = await authRequest("/auth/register", { method: "POST", body: {
+                    role: role.value, fullName: $("suName").value.trim(), dob: $("suDob").value, gender: $("suGender").value,
+                    email: $("suEmail").value.trim(), mobile: cleanMobile($("suMobile").value),
+                    state: picker.getState(), city: picker.getCity(), district: picker.getDistrict(), pincode: $("suPin").value.trim(),
+                    password: $("suPassword").value, confirmPassword: $("suConfirm").value, acceptTerms: true,
+                    notifyNearbyCamps: $("suNotify").checked
+                }, headers: idempotencyHeaders($("signupForm")) });
+                submissionDone($("signupForm"));
+                showFormAlert(alertBox, escapeHtml(data.message) + (data.emailNote ? " " + escapeHtml(data.emailNote) : "") + " Opening your dashboard…", "success");
+                setTimeout(() => { location.href = "dashboard.html"; }, data.emailNote ? 2500 : 700);
+            } catch (error) {
+                showFormAlert(alertBox, escapeHtml(error.message));
+            } finally {
+                button.disabled = false; button.textContent = "Create Account";
+            }
+        });
+    </script>
+</body>
+</html>
