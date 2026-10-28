@@ -92,6 +92,10 @@ app.get("/admin-login.html", (req, res, next) => { res.setHeader("X-Robots-Tag",
 // Serve the frontend folder, so http://localhost:5000 opens the website
 app.use(express.static(FRONTEND));
 
+app.get("/googledb8b31b1705cd64b.html", (req, res) => {
+    res.sendFile(path.join(FRONTEND, "googledb8b31b1705cd64b.html"));
+});
+
 
 // ================================
 // HELPER FUNCTIONS
