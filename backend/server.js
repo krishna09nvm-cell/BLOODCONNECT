@@ -71,7 +71,9 @@ app.use(express.json());      // read JSON request bodies
 const FRONTEND = path.join(__dirname, "..", "frontend");
 
 // The first page is the Welcome / Login page
-app.get("/", (req, res) => res.sendFile(path.join(FRONTEND, "index.html")));
+app.get("/", (req, res) => {
+  res.redirect("/index.html");
+});
 
 // The dashboard is only for logged-in users (the API checks again)
 app.get("/dashboard.html", (req, res, next) => {
