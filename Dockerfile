@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Install only the server dependencies (express, cors)
 COPY backend/package.json backend/package-lock.json backend/
-RUN cd backend && npm ci --omit=dev
+RUN cd backend && npm install --omit=dev
 
 # Copy the website and the server
 COPY backend backend
