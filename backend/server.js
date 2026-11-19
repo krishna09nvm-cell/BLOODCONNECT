@@ -72,7 +72,7 @@ const FRONTEND = path.join(__dirname, "..", "frontend");
 
 // The first page is the Welcome / Login page
 app.get("/", (req, res) => {
-  res.redirect("/index.html");
+  res.sendFile(path.join(FRONTEND, "welcome.html"));
 });
 
 // The dashboard is only for logged-in users (the API checks again)
